@@ -8,8 +8,8 @@ int t_muestreo=10;                //10 miliseg
 int a;
 int b;
 #include "arduino_secrets.h" 
-char ssid[] = "Xperia XA1_5b0c";        // your network SSID (name)
-char pass[] = "0bec56cbadc8";    // your network password (use for WPA, or use as key for WEP)
+char ssid[] = "Xperia";        // your network SSID (name)
+char pass[] = "0bec545";    // your network password (use for WPA, or use as key for WEP)
 int status = WL_IDLE_STATUS;
 // if you don't want to use DNS (and reduce your sketch size)
 // Initialize the Ethernet client library
