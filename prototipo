@@ -1,0 +1,60 @@
+int val=0;
+int ypin=A1;    //direccion z
+#include <Smartlab.h>
+#include <SmartlabWifi.h>
+#include <SPI.h>
+#include <WiFi101.h>
+int t_muestreo=10;                //10 miliseg
+int a;
+int b;
+#include "arduino_secrets.h" 
+char ssid[] = "Xperia XA1_5b0c";        // your network SSID (name)
+char pass[] = "0bec56cbadc8";    // your network password (use for WPA, or use as key for WEP)
+int status = WL_IDLE_STATUS;
+// if you don't want to use DNS (and reduce your sketch size)
+// Initialize the Ethernet client library
+WiFiSSLClient client;
+SmartlabWifi smartlab(client);
+void setup() {
+Serial.begin(9600);
+pinMode(ypin, INPUT);
+  // attempt to connect to WiFi network:
+  while (status != WL_CONNECTED) {
+     // Connect to WPA/WPA2 network. Change this line if using open or WEP network:
+    status = WiFi.begin(ssid, pass);
+    // wait 8 seconds for connection:
+    delay(8000);
+  }
+  smartlab.setUrl("https://smartlab.caminstech.upc.edu/api/device/5cbb0ec850461600282e8c28/data", "LmRrvKCajtAwyUhlf7gd20NPqz4BXZTE");
+}
+void loop() {
+int a=0;
+Serial.print(a);
+Serial.println ("\n");
+b = a;
+if (b >= 0){
+int datos[30];                             
+int tiempo[30];                           
+tiempo[0]=0;
+for (int i = 1; i < 30; i = i + 1)        
+{
+  int y=analogRead(ypin);
+  a=map(y,500,608,0,980);
+  datos[i]=a;
+  tiempo[i]=tiempo[i-1]+t_muestreo;
+  Serial.println(tiempo[i]);
+  Serial.println(datos[i]);
+  delay(t_muestreo);
+  if (i == 29){                           //99
+    for (int i = 1; i < 30; i = i + 1)   //100
+    {
+    smartlab.addValue("datos",datos[i]);
+    smartlab.addValue("tiempo", tiempo[i]);
+    smartlab.send();
+    }
+    }
+  }
+}
+ Serial.print(" No guardado: ");
+ Serial.println(b);
+}
